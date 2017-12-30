@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home Assistant Vanilla</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <link type="text/css" rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="banner" id="header">
+        <h1>Vanilla Home Assistant</h1>
+        <h2>Old school in the 21th Century</h2>
+        </div>
+        <div id="config">
+            <div class="item"><label for="site">Site:</label><input
+                    type="text" name="site" placeholder="home.lan.unitedheroes.net" value="home.lan.unitedheroes.net"
+            ></div>
+            <div class="control"><button name="save_conf">Save</button></div>
+        </div>
+        <div class="body">
+        <div id="pages"></div>
+        <div id="sensors"></div>
+        <div id="groups"></div>
+        </div>
+    <script src="worker.js"></script>
+    <script src="socket.js"></script>
+    <script>
+    window.ws = new Connection();
+    window.ws.connect().then(conn => {
+        conn.send('get_states',
+            function(states) {
+            // Populate the sensors
+                for (sensor of states.result) {
+                    make_sensor(sensor, document.getElementById("sensors"));
+                }
+            })
+    });
+    </script>
+    </body>
+</html>
