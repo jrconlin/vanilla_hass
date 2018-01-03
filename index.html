@@ -5,6 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <link type="text/css" rel="stylesheet" href="style.css">
+        <script src="worker.js"></script>
     </head>
     <body>
         <div class="banner" id="header">
@@ -39,6 +40,7 @@
                     let group = elements.getElementsByClassName(gtype)[0];
                     if (group === undefined){
                         group = document.createElement('div');
+                        group.classList.add('section');
                         let heading = document.createElement('h2');
                         heading.innerText = gtype;
                         group.appendChild(heading);

@@ -3,49 +3,112 @@
 body {
     font: 100% arial;
 }
-
+h2 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    background: linear-gradient(45deg, #ffdddd, white);
+}
+#header h2 {
+    background: none;
+    font-size: 78%
+}
 .sense[data-state="on"]::before {
     content: "💡";
 }
 .sense[data-state="off"]::before {
     content: "⬛";
 }
-.sense[data-name*="tempera"]::after {
-    content: attr(data-state);
-    display:inline-block;
-    padding-left: 10px;
-    color:red;
+.section {
+    width: 50%;
+    padding: 5px;
+    background-color: white;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+
+}
+div.group {
+    position: absolute;
+    right: 0px;
+    top: 10ex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
+div.sensor {
+    display:grid;
+    width: 50%;
+    grid-template-columns: 1fr 1fr;
+    position: absolute;
+    right: 0px;
+    top: 30ex;
+}
 .group span, .light span, .switch span {
     display:block;
 }
 
+.weather .thermostat {
+    font-size: 0;
+}
 .weather .thermostat::after {
-    padding-left: 1em;
     content: attr(data-state);
+    font-size: 12pt;
 }
 
-.sensor {
-    width: 100%;
+.sensor div {
+
 }
 .sensor *::after {
-    padding-left: 1em;
-    content: attr(data-state) " " attr(data-attributes-unit_of_measurement);
-    color: #333;
+    padding: 0 0 0 .25em;
+    font-size: 90%;
+    text-align:bottom;
+    content: attr(data-state) attr(data-attributes-unit_of_measurement);
+    color: #888;
 }
 
 .automation, .script, .zone, .zwave {
     display: none;
 }
 
+.sun .sun {
+    font-size: 0;
+}
+
 .sun .sun[data-state="above_horizon"]::after {
+    font-size: 12pt;
     content: "☀️";
 }
 .sun .sun[data-state="below_horizon"]::after {
+    font-size: 12pt;
     content: "🌙";
 }
 
+.climate .thermostat {
+    font-size: 0;
+}
+.climate .thermostat::after {
+    color: black;
+    font-size: 12pt;
+    content: attr(data-attributes-mode) " mode: " attr(data-attributes-current_temperature) "°F, " attr(data-attributes-actual_humidity) "% humidity"
+}
+
+.weather_symbol[data-state="1"]::after{
+    content: "☀️";
+}
+.weather_symbol[data-state="2"]::after{
+    content: "🌤️";
+}
+.weather_symbol[data-state="2"]::after{
+    content: "️️🌥️";
+}
+.weather_symbol[data-state="4"]::after{
+    content: "☁️";
+}
+.weather_symbol[data-state="5"]::after {
+    content: "🌦️";
+}
+.weather_symbol[data-state="6"]::after {
+    content: "⛈️";
+}
 
 .group * input[type="checkbox"] {margin-right: 5px;}
 .switch * input[type="checkbox"] {margin-right: 5px;}
