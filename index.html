@@ -18,9 +18,8 @@
             <div class="control"><button name="save_conf">Save</button></div>
         </div>
         <div class="body">
-        <div id="pages"></div>
-        <div id="sensors"></div>
-        <div id="groups"></div>
+            <div id="pages"></div>
+            <div id="elements"></div>
         </div>
     <script src="worker.js"></script>
     <script src="socket.js"></script>
@@ -30,8 +29,27 @@
         conn.send('get_states',
             function(states) {
             // Populate the sensors
-                for (sensor of states.result) {
-                    make_sensor(sensor, document.getElementById("sensors"));
+                for (let element of states.result) {
+                    if (element == undefined) {
+                        continue;
+                    }
+                    let grouping = sensor_type(element);
+                    let gtype = grouping[0];
+                    let elements = document.getElementById("elements");
+                    let group = elements.getElementsByClassName(gtype)[0];
+                    if (group === undefined){
+                        group = document.createElement('div');
+                        let heading = document.createElement('h2');
+                        heading.innerText = gtype;
+                        group.appendChild(heading);
+                        group.classList.add(gtype);
+                        elements.appendChild(group);
+                    }
+                    try {
+                        window["make_"+gtype](element, grouping, group)
+                    } catch(e) {
+                        make_sensor(element, grouping, group)
+                    }
                 }
             })
     });

@@ -16,3 +16,37 @@ body {
     padding-left: 10px;
     color:red;
 }
+
+.group span, .light span, .switch span {
+    display:block;
+}
+
+.weather .thermostat::after {
+    padding-left: 1em;
+    content: attr(data-state);
+}
+
+.sensor {
+    width: 100%;
+}
+.sensor *::after {
+    padding-left: 1em;
+    content: attr(data-state) " " attr(data-attributes-unit_of_measurement);
+    color: #333;
+}
+
+.automation, .script, .zone, .zwave {
+    display: none;
+}
+
+.sun .sun[data-state="above_horizon"]::after {
+    content: "☀️";
+}
+.sun .sun[data-state="below_horizon"]::after {
+    content: "🌙";
+}
+
+
+.group * input[type="checkbox"] {margin-right: 5px;}
+.switch * input[type="checkbox"] {margin-right: 5px;}
+.light * input[type="checkbox"] {margin-right: 5px;}
