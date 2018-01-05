@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width">
         <link type="text/css" rel="stylesheet" href="style.css">
         <script src="worker.js"></script>
+        <link rel-"manifest" href="manifest.webmanifest">
+        <meta name="application-name" content="Vanilla Home Assistant">
     </head>
     <body>
         <div class="banner" id="header">
@@ -41,13 +43,11 @@
                             if (element === undefined) {
                                 continue;
                             }
-                            console.debug("element", element.entity_id);
                             let grouping = sensor_type(element.entity_id);
                             let gtype = grouping[0];
                             let elements = document.getElementById("elements");
                             let group = elements.getElementsByClassName("section " + gtype)[0];
                             if (group === undefined){
-                                console.debug("Creating group for ", gtype);
                                 group = document.createElement('div');
                                 group.classList.add('section');
                                 let heading = document.createElement('h2');

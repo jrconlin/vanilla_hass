@@ -33,7 +33,7 @@ Connection.prototype.connect = function(url, secret) {
 
         socket.onmessage = function(message) {
             let cmd = JSON.parse(message.data);
-            console.debug("message" + JSON.stringify(cmd));
+            console.debug("message", cmd);
             if (cmd.type === "auth_ok") {
                 self.socket = socket;
                 resolve(self);

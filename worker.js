@@ -25,7 +25,7 @@ function toggle_switch(event) {
             },
         },
         function (response) {
-            console.debug(response);
+            console.debug('response', response);
             if (response.success) {
                 target.checked = state;
             }

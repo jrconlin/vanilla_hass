@@ -1,0 +1,7 @@
+{
+"name": "Vanilla Home Assistant",
+"short_name": "Vanilla Hass",
+"start_url": ".",
+"display": "browser",
+"background_color": "#7a9e35",
+}
