@@ -15,21 +15,25 @@ function Connection()
 {
     this.socket = {};
     this.cmds = {};
+    this.event_handler;
+    this.id_base = Date.now();
 }
 
-Connection.prototype.connect = function(url = 'ws://'+ HOST + ':' + PORT + '/api/websocket',
-                                        secret) {
+Connection.prototype.connect = function(url, secret) {
+    if (! url.includes('api/websocket')) {
+        url = url + '/api/websocket';
+    }
     let socket = new WebSocket(url);
     let self = this;
 
     return new Promise((resolve, reject) => {
         socket.onopen = function(e) {
-            console.log('Open ' + JSON.stringify(e));
+            console.info('websocket connection open', e);
         };
 
         socket.onmessage = function(message) {
             let cmd = JSON.parse(message.data);
-            console.log("Message = " + JSON.stringify(cmd));
+            console.debug("message" + JSON.stringify(cmd));
             if (cmd.type === "auth_ok") {
                 self.socket = socket;
                 resolve(self);
@@ -39,34 +43,39 @@ Connection.prototype.connect = function(url = 'ws://'+ HOST + ':' + PORT + '/api
         };
 
         socket.onerror = function(err){
-            console.error("Websocket error: " + err);
+            console.error("Websocket error: ", err);
             reject(err);
         };
 
         socket.onclose = function(e) {
-            console.log("Websocket connection closed: " + JSON.stringify(e));
+            console.warn("Websocket connection closed", e);
         };
     });
 };
 
 Connection.prototype.send = function(cmd, callback) {
     try {
-        let req = {
-            "type": cmd,
-            "id": Date.now(),
-        };
-        if (callback) {
-            this.cmds[req.id] = callback;
+        if (cmd.id == undefined) {
+            cmd.id = ++this.id_base;
         }
-        this.socket.send(JSON.stringify(req));
+        if (callback) {
+            this.cmds[cmd.id] = callback;
+        }
+        console.debug("send", cmd);
+        this.socket.send(JSON.stringify(cmd));
     } catch(e) {
         console.error(e);
     }
 };
 
+Connection.prototype.event_handler = function(callback) {
+    this.event_handler = callback;
+    this.send({'type': 'subscribe_events', 'event_type': 'state_changed'});
+};
+
 Connection.prototype.error  = function(err) {
     console.error(err);
-    this.socket.close();
+    // this.socket.close();
 };
 
 Connection.prototype.msg_auth_ok = function(msg){
@@ -78,9 +87,16 @@ Connection.prototype.msg_result = function(resp){
     if (!resp.success) {
         return this.error(resp);
     }
-    console.debug(resp);
+    console.debug("result", resp);
     if (this.cmds[resp.id]){
         this.cmds[resp.id](resp);
         delete(this.cmds[resp.id]);
     }
 };
+
+Connection.prototype.msg_event = function(event) {
+    console.debug("event", event.event);
+    if (this.event_handler !== undefined) {
+        this.event_handler(event.event);
+    }
+}

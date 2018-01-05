@@ -2,102 +2,165 @@
 
 body {
     font: 100% arial;
+    background-color: #7a9e35;
+    color: #d2ed9e;
 }
 h2 {
     grid-column-start: 1;
     grid-column-end: 3;
-    background: linear-gradient(45deg, #ffdddd, white);
+    background: linear-gradient(45deg, #557714, transparent);
+    padding: 0 .5em
+}
+
+#header {
+    position:absolute;
+    bottom: 5px;
+    right:5px;
 }
 #header h2 {
     background: none;
     font-size: 78%
 }
-.sense[data-state="on"]::before {
-    content: "💡";
+
+#config {position: absolute;
+    bottom:0;
 }
-.sense[data-state="off"]::before {
-    content: "⬛";
+#config input {
+    background-color: #a4c663;
+    color: #d2ed9e;
+    border:none;
+    width: 20em;
+    padding: 0 .5em;
+    margin: 0 3px;
 }
+#config button {
+    background-color: #a4c663;
+    border: none;
+    padding: 3px;
+    margin: 2px;
+    color: #d2ed9e;
+    border-radius: .5em .5em .5em
+}
+
 .section {
     width: 50%;
     padding: 5px;
-    background-color: white;
+    background-color: #7a9e35;
     display:grid;
     grid-template-columns: 1fr 1fr;
 
 }
 div.group {
-    position: absolute;
     right: 0px;
-    top: 10ex;
+    bottom: 10ex;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
-div.sensor {
-    display:grid;
-    width: 50%;
-    grid-template-columns: 1fr 1fr;
-    position: absolute;
-    right: 0px;
-    top: 30ex;
-}
 .group span, .light span, .switch span {
     display:block;
 }
 
-.weather .thermostat {
+.sensor {
+    position: absolute;
+    right: 0px;
+    top: 0ex;
+    background-color: transparent;
     font-size: 0;
+    width:100%;
 }
-.weather .thermostat::after {
-    content: attr(data-state);
-    font-size: 12pt;
-}
-
-.sensor div {
-
+.sensor h2 {
+    display: none;
 }
 .sensor *::after {
     padding: 0 0 0 .25em;
     font-size: 90%;
-    text-align:bottom;
+    text-align:right;
     content: attr(data-state) attr(data-attributes-unit_of_measurement);
-    color: #888;
 }
 
 .automation, .script, .zone, .zwave {
     display: none;
 }
 
+.sun h2 { display: none;}
 .sun .sun {
-    font-size: 0;
+    position: absolute;
+    top: 0;
+    right: 2em;
+    font-size: 36pt;
 }
 
+/*
 .sun .sun[data-state="above_horizon"]::after {
-    font-size: 12pt;
+    font-size: 36pt;
+    color: #ffdddd;
     content: "☀️";
 }
+
 .sun .sun[data-state="below_horizon"]::after {
-    font-size: 12pt;
+    font-size: 36pt;
     content: "🌙";
 }
-
+*/
+.camera h2 {
+    display: none;
+}
+.camera img{
+    width: 100%;
+    max-width: 500px;
+}
+.climate {
+    display: none;
+}
+.climate h2 {
+    font-size: 0;
+}
+.climate h2:after {
+    content: "Thermostat";
+    font-size: 12pt;
+}
 .climate .thermostat {
     font-size: 0;
 }
 .climate .thermostat::after {
-    color: black;
     font-size: 12pt;
-    content: attr(data-attributes-mode) " mode: " attr(data-attributes-current_temperature) "°F, " attr(data-attributes-actual_humidity) "% humidity"
+    white-space: pre;
+    content: attr(data-attributes-mode) " mode\A" attr(data-attributes-current_temperature) "°F, " attr(data-attributes-actual_humidity) "% humidity"
 }
 
+.weather .thermostat {
+    position: absolute;
+    top: 50px;
+    right: 80px;
+    font-size: 0;
+}
+
+.weather .thermostat::after {
+    content: attr(data-state);
+    font-size: 24pt;
+}
+
+.weather_symbol {
+    position:absolute;
+    top:0;
+    right:0;
+    font-size: 0pt;
+}
+
+.weather h2 {display: none;}
+.weather {padding:0;}
+
+.weather_symbol:after {
+    font-size: 36pt;
+}
 .weather_symbol[data-state="1"]::after{
     content: "☀️";
 }
 .weather_symbol[data-state="2"]::after{
     content: "🌤️";
 }
-.weather_symbol[data-state="2"]::after{
+.weather_symbol[data-state="3"]::after{
     content: "️️🌥️";
 }
 .weather_symbol[data-state="4"]::after{
@@ -109,7 +172,80 @@ div.sensor {
 .weather_symbol[data-state="6"]::after {
     content: "⛈️";
 }
+.weather_temperature {
+    position: absolute;
+    top: 80px;
+    right: 210px;
+    font-size:0;
+}
+.weather_temperature:after {
+    font-size: 18pt;
+    content: "Outside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
+}
+.thermostat_humidity {
+    position: absolute;
+    top: 120px;
+    right: 40px;
+    font-size:0;
+}
+.thermostat_humidity:after {
+    font-size: 18pt;
+    content: "Humidity " attr(data-state) attr(data-attributes-unit_of_measurement);
+}
+.thermostat_temperature{
+    position: absolute;
+    top: 120px;
+    right: 210px;
+    font-size:0;
+}
+.thermostat_temperature:after {
+    font-size: 18pt;
+    content: "Inside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
+}
+.weather_wind_speed {
+ position: absolute;
+    top: 150px;
+    right: 210px;
+    font-size:0;
+}
+.weather_wind_speed:after {
+    content: "Winds " attr(data-state) attr(data-attributes-unit_of_measurement);
+    font-size: 18pt;
+}
+.solar_production {
+    position: absolute;
+    top: 210px;
+    right: 40px;
+}
+.solar_production:after {
+    content: "Solar currently producing " attr(data-state) attr(data-attributes-unit_of_measurement);
+    font-size: 18pt;
+}
 
-.group * input[type="checkbox"] {margin-right: 5px;}
-.switch * input[type="checkbox"] {margin-right: 5px;}
-.light * input[type="checkbox"] {margin-right: 5px;}
+.section + .camera {
+    grid-template-columns: 1fr;
+    width: 33%;
+    max-width: 500px;
+    position: absolute;
+    top: 250px;
+    right: 45px;
+}
+
+.device_tracker h2 {font-size:0;}
+.device_tracker h2:after{content: " Devices"; font-size: 12pt}
+
+.device_tracker div[data-state="home"]::before {
+    content: "🏠";
+}
+
+.device_tracker div[data-state="not_home"]::before{
+    content: "🏖️";
+}
+
+.section * input[type="checkbox"] {margin-right: 5px;}
+
+.hidden {
+    display: none !important;
+}
+
+*[data-attributes-hidden="true"]{ display: none !important;}

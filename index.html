@@ -13,7 +13,7 @@
         <h2>Old school in the 21th Century</h2>
         </div>
         <div id="config">
-            <div class="item"><label for="site">Site:</label><input
+            <div class="item"><label for="site">Site:</label><input id="site"
                     type="text" name="site" placeholder="home.lan.unitedheroes.net" value="home.lan.unitedheroes.net"
             ></div>
             <div class="control"><button name="save_conf">Save</button></div>
@@ -25,36 +25,57 @@
     <script src="worker.js"></script>
     <script src="socket.js"></script>
     <script>
-    window.ws = new Connection();
-    window.ws.connect().then(conn => {
-        conn.send('get_states',
-            function(states) {
-            // Populate the sensors
-                for (let element of states.result) {
-                    if (element == undefined) {
-                        continue;
-                    }
-                    let grouping = sensor_type(element);
-                    let gtype = grouping[0];
-                    let elements = document.getElementById("elements");
-                    let group = elements.getElementsByClassName(gtype)[0];
-                    if (group === undefined){
-                        group = document.createElement('div');
-                        group.classList.add('section');
-                        let heading = document.createElement('h2');
-                        heading.innerText = gtype;
-                        group.appendChild(heading);
-                        group.classList.add(gtype);
-                        elements.appendChild(group);
-                    }
-                    try {
-                        window["make_"+gtype](element, grouping, group)
-                    } catch(e) {
-                        make_sensor(element, grouping, group)
-                    }
-                }
-            })
-    });
+        document.getElementById("site").addEventListener("change", reconnect);
+
+        function reconnect() {
+            let site = document.getElementById("site").value;
+            if (!site.toString().includes(':')) {
+                site = "ws://" + site + ":8123"
+            }
+            window.ws = new Connection();
+            window.ws.connect(site).then(conn => {
+                conn.send({'type': 'get_states'},
+                    function(states) {
+                    // Populate the sensors
+                        for (let element of states.result) {
+                            if (element === undefined) {
+                                continue;
+                            }
+                            console.debug("element", element.entity_id);
+                            let grouping = sensor_type(element.entity_id);
+                            let gtype = grouping[0];
+                            let elements = document.getElementById("elements");
+                            let group = elements.getElementsByClassName("section " + gtype)[0];
+                            if (group === undefined){
+                                console.debug("Creating group for ", gtype);
+                                group = document.createElement('div');
+                                group.classList.add('section');
+                                let heading = document.createElement('h2');
+                                heading.innerText = gtype;
+                                group.appendChild(heading);
+                                group.classList.add(gtype);
+                                elements.appendChild(group);
+                            }
+                            try {
+                                window["make_"+gtype](element, grouping, group)
+                            } catch(e) {
+                                make_sensor(element, grouping, group)
+                            }
+                        }
+                    });
+                return conn;
+            }).then( conn => {
+                conn.event_handler(handle_event);
+                return conn;
+            }).catch(err => console.error(err))
+        }
+
+        reconnect();
+        document.getElementsByName("save_conf")[0].onclick = function() {
+            let site = document.getElementsByName("site")[0].value;
+            window.localStorage.setItem("host", site);
+            console.info("Config saved");
+        };
     </script>
     </body>
 </html>
