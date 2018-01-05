@@ -46,11 +46,12 @@ function make_switch(data, grouping, parent) {
     try{
         friendly_name = data.attributes.friendly_name;
     }
-    catch {
+    catch (e) {
         friendly_name = grouping[1];
     }
     label.setAttribute('for', grouping[1]);
     label.innerText = friendly_name;
+    item.id = grouping[1];
     item.setAttribute('type', 'checkbox');
     item.classList.add(grouping[1]);
 
@@ -116,6 +117,7 @@ function make_camera(data, grouping, parent) {
     let item = document.createElement('img');
     let host = new URL(window.ws.socket.url).host;
     item.src = '//' + host + data.attributes.entity_picture;
+    item.classList.add(grouping[1]);
     let raw_src = item.src;
     function update_img() {
         item.src = raw_src + "&time=" + Date.now();
@@ -160,7 +162,7 @@ function make_sensor(data, grouping, parent){
     try{
         friendly_name = data.attributes.friendly_name;
     }
-    catch {
+    catch (e) {
         friendly_name = grouping[1];
     }
     item.innerText = friendly_name;
