@@ -72,7 +72,7 @@ div.group {
 .sensor h2 {
     display: none;
 }
-.sensor *::after {
+.sensor *:after {
     padding: 0 0 0 .25em;
     font-size: 90%;
     text-align:right;
@@ -84,21 +84,15 @@ div.group {
 }
 
 .sun h2 { display: none;}
-.sun .sun {
-    position: absolute;
-    top: 0;
-    right: 2em;
-    font-size: 36pt;
-}
 
 /*
-.sun .sun[data-state="above_horizon"]::after {
+.sun .sun[data-state="above_horizon"]:after {
     font-size: 36pt;
     color: #ffdddd;
     content: "☀️";
 }
 
-.sun .sun[data-state="below_horizon"]::after {
+.sun .sun[data-state="below_horizon"]:after {
     font-size: 36pt;
     content: "🌙";
 }
@@ -124,114 +118,184 @@ div.group {
 .climate .thermostat {
     font-size: 0;
 }
-.climate .thermostat::after {
+.climate .thermostat:after {
     font-size: 12pt;
     white-space: pre;
     content: attr(data-attributes-mode) " mode\A" attr(data-attributes-current_temperature) "°F, " attr(data-attributes-actual_humidity) "% humidity"
 }
 
-.weather .thermostat {
-    position: absolute;
-    top: 50px;
-    right: 80px;
-    font-size: 0;
-}
-
-.weather .thermostat::after {
-    content: attr(data-state);
-    font-size: 24pt;
-}
-
-.weather_symbol {
-    position:absolute;
-    top:0;
-    right:0;
-    font-size: 0pt;
-}
-
-.weather h2 {display: none;}
-.weather {padding:0;}
-
-.weather_symbol:after {
-    font-size: 36pt;
-}
-.weather_symbol[data-state="1"]::after{
+.weather_symbol[data-state="1"]:after{
     content: "☀️";
 }
-.weather_symbol[data-state="2"]::after{
+.weather_symbol[data-state="2"]:after{
     content: "🌤️";
 }
-.weather_symbol[data-state="3"]::after{
+.weather_symbol[data-state="3"]:after{
     content: "️️🌥️";
 }
-.weather_symbol[data-state="4"]::after{
+.weather_symbol[data-state="4"]:after{
     content: "☁️";
 }
-.weather_symbol[data-state="5"]::after {
+.weather_symbol[data-state="5"]:after {
     content: "🌦️";
 }
-.weather_symbol[data-state="6"]::after {
+.weather_symbol[data-state="6"]:after {
     content: "⛈️";
 }
-.weather_temperature {
-    position: absolute;
-    top: 90px;
-    right: 210px;
-    font-size:0;
-}
-.weather_temperature:after {
-    font-size: 18pt;
-    content: "Outside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
-}
-.thermostat_humidity {
-    position: absolute;
-    top: 120px;
-    right: 40px;
-    font-size:0;
-}
-.thermostat_humidity:after {
-    font-size: 18pt;
-    content: "Humidity " attr(data-state) attr(data-attributes-unit_of_measurement);
-}
-.thermostat_temperature{
-    position: absolute;
-    top: 120px;
-    right: 210px;
-    font-size:0;
-}
-.thermostat_temperature:after {
-    font-size: 18pt;
-    content: "Inside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
-}
-.weather_wind_speed {
- position: absolute;
-    top: 150px;
-    right: 210px;
-    font-size:0;
-}
-.weather_wind_speed:after {
-    content: "Winds " attr(data-state) attr(data-attributes-unit_of_measurement);
-    font-size: 18pt;
-}
-.solar_production {
-    position: absolute;
-    top: 210px;
-    right: 40px;
-}
-.solar_production:after {
-    content: "Solar currently producing " attr(data-state) attr(data-attributes-unit_of_measurement);
-    font-size: 18pt;
+.weather_symbol[data-state="46"]:after{
+    content: "🌧️";
 }
 
-.section + .camera {
-    grid-template-columns: 1fr;
-    width: 33%;
-    max-width: 500px;
-    position: absolute;
-    top: 250px;
-    right: 45px;
+@media screen and (min-width: 900px ) {
+    .sun .sun {
+        position: absolute;
+        top: 0;
+        right: 2em;
+        font-size: 36pt;
+    }
+
+    .weather .thermostat {
+        position: absolute;
+        top: 50px;
+        right: 80px;
+        font-size: 0;
+    }
+
+    .weather .thermostat:after {
+        content: attr(data-state);
+        font-size: 24pt;
+    }
+
+    .weather_symbol {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 0pt;
+    }
+
+    .weather h2 {
+        display: none;
+    }
+
+    .weather {
+        padding: 0;
+    }
+
+    .weather_symbol:after {
+        font-size: 36pt;
+    }
+
+    .weather_temperature {
+        position: absolute;
+        top: 90px;
+        right: 210px;
+        font-size: 0;
+    }
+
+    .weather_temperature:after {
+        font-size: 18pt;
+        content: "Outside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
+    }
+
+    .thermostat_humidity {
+        position: absolute;
+        top: 120px;
+        right: 40px;
+        font-size: 0;
+    }
+
+    .thermostat_humidity:after {
+        font-size: 18pt;
+        content: "Humidity " attr(data-state) attr(data-attributes-unit_of_measurement);
+    }
+
+    .thermostat_temperature {
+        position: absolute;
+        top: 120px;
+        right: 210px;
+        font-size: 0;
+    }
+
+    .thermostat_temperature:after {
+        font-size: 18pt;
+        content: "Inside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
+    }
+
+    .weather_wind_speed {
+        position: absolute;
+        top: 150px;
+        right: 210px;
+        font-size: 0;
+    }
+
+    .weather_wind_speed:after {
+        content: "Winds " attr(data-state) attr(data-attributes-unit_of_measurement);
+        font-size: 18pt;
+    }
+
+    .solar_production {
+        position: absolute;
+        top: 210px;
+        right: 40px;
+    }
+
+    .solar_production:after {
+        content: "Solar currently producing " attr(data-state) attr(data-attributes-unit_of_measurement);
+        font-size: 18pt;
+    }
+
+    .section + .camera {
+        grid-template-columns: 1fr;
+        width: 33%;
+        max-width: 500px;
+        position: absolute;
+        top: 250px;
+        right: 45px;
+    }
 }
 
+@media screen and (max-width:900px) {
+    .section {
+        width:100%;
+    }
+    body {
+        display: grid;
+        grid-temlate-rows: [content] auto [config] auto [header] auto;
+    }
+    #header {
+        position: unset;
+        grid-row: 3;
+        text-align: right;
+        font-size: 50%;
+    }
+    #elements {
+        display: grid;
+        grid-row: 1;
+    }
+    #config {
+        position: unset;
+        grid-row: 2;
+        font-size: 80%;
+
+    }
+    .section + .weather {
+        display: none;
+    }
+    .section + .device_tracker {
+        display: none;
+    }
+    .section + .group {
+        grid-row: 3;
+    }
+    .section + .sun {
+        grid-template-columns:1fr;
+        grid-row: 1;
+        font-size: 150%;
+    }
+    .section + .camera {
+        grid-row: 5;
+    }
+}
 .section span {
     padding: 5px;
 }
@@ -239,11 +303,11 @@ div.group {
 .device_tracker h2 {font-size:0;}
 .device_tracker h2:after{content: " Devices"; font-size: 12pt}
 
-.device_tracker div[data-state="home"]::before {
+.device_tracker div[data-state="home"]:before {
     content: "🏠";
 }
 
-.device_tracker div[data-state="not_home"]::before{
+.device_tracker div[data-state="not_home"]:before{
     content: "🏖️";
 }
 

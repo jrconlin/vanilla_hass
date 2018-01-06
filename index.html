@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="initial-scale=1,width=device-width" />
         <title>Home Assistant Vanilla</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <link type="text/css" rel="stylesheet" href="style.css">
         <script src="worker.js"></script>
-        <link rel-"manifest" href="manifest.webmanifest">
+        <link rel=manifest" href="manifest.webmanifest">
         <meta name="application-name" content="Vanilla Home Assistant">
     </head>
     <body>
@@ -24,6 +25,7 @@
             <div id="pages"></div>
             <div id="elements"></div>
         </div>
+        <button id="reconnect">Connect to server</button>
     <script src="worker.js"></script>
     <script src="socket.js"></script>
     <script>
@@ -63,6 +65,7 @@
                             }
                         }
                     });
+                document.getElementById("reconnect").classList.add("hidden");
                 return conn;
             }).then( conn => {
                 conn.event_handler(handle_event);
@@ -70,7 +73,16 @@
             }).catch(err => console.error(err))
         }
 
+        function check_connection(){
+            if (window.ws.socket.readyState in [window.ws.socket.OPEN, window.ws.socket.CONNECTING] === false) {
+                document.getElementById("reconnect").classList.remove("hidden");
+            }
+        }
+
+        document.getElementById("reconnect").addEventListener("click", reconnect);
+
         reconnect();
+        setInterval(check_connection, 1000);
         document.getElementsByName("save_conf")[0].onclick = function() {
             let site = document.getElementsByName("site")[0].value;
             window.localStorage.setItem("host", site);

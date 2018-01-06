@@ -37,6 +37,10 @@ function toggle_switch(event) {
 
 function make_switch(data, grouping, parent) {
     // Make a generic, "switch" that can be toggled between "on" and "off".
+    let previous = parent.getElementsByClassName(grouping[1]);
+    if (previous.length){
+        return update_item(previous[0], data, grouping);
+    }
     let sp = document.createElement('span')
     let item = document.createElement('input');
     let label = document.createElement('label');
@@ -56,25 +60,7 @@ function make_switch(data, grouping, parent) {
     item.classList.add(grouping[1]);
 
     // Define the dataset as a flat array of the various attributes. We'll use these later as part of the controls.
-    for (let i in data) {
-        if (typeof(data[i]) === "object") {
-            for (let j in data[i]) {
-                try {
-                    let value = data[i][j];
-                    if (value == null) {
-                        value = "None"
-                    } else {
-                        value = value.toString();
-                    }
-                    item.setAttribute('data-' + i + '-' + j, value);
-                }catch (e){
-                    console.error(grouping, i, j, e);
-                }
-            }
-            continue;
-        }
-        item.setAttribute('data-' + i, data[i].toString());
-    }
+    update_item(item, data, grouping);
     if (data.attributes["hidden"]) {
         sp.classList.add("hidden");
     }
@@ -114,10 +100,16 @@ function make_sun(data, grouping, parent){
 }
 
 function make_camera(data, grouping, parent) {
-    let item = document.createElement('img');
-    let host = new URL(window.ws.socket.url).host;
-    item.src = '//' + host + data.attributes.entity_picture;
-    item.classList.add(grouping[1]);
+    let previous = parent.getElementsByClassName(grouping[1]);
+    let item;
+    if (previous.length) {
+        item = previous[0];
+    } else {
+        item = document.createElement('img');
+        let host = new URL(window.ws.socket.url).host;
+        item.src = '//' + host + data.attributes.entity_picture;
+        item.classList.add(grouping[1]);
+    }
     let raw_src = item.src;
     function update_img() {
         item.src = raw_src + "&time=" + Date.now();
@@ -126,31 +118,40 @@ function make_camera(data, grouping, parent) {
     parent.appendChild(item);
 }
 
+function update_item(item, data, grouping) {
+    for (let i in data) {
+        if (typeof(data[i]) === "object") {
+            for (let j in data[i]) {
+                try {
+                    let value = data[i][j];
+                    if (value == null) {
+                        value = "None"
+                    } else {
+                        value = value.toString();
+                    }
+                    item.setAttribute('data-' + i + '-' + j, value);
+                }catch (e){
+                    console.error(grouping, i, j, e);
+                }
+            }
+            continue;
+        }
+        item.setAttribute('data-' + i, data[i].toString());
+    }
+    return item;
+}
+
 function make_sensor(data, grouping, parent){
     // A "sensor" is a generic "Read only" sort of data input.
+    let previous = parent.getElementsByClassName(grouping[1]);
+    if (previous.length){
+        return update_item(previous[0], data, grouping);
+    }
     let item = document.createElement('div');
     item.classList.add(grouping[1]);
     // Define the dataset for this element. We'll use these later when we want to do something with the control.
     try {
-        for (let i in data) {
-            if (typeof(data[i]) === "object") {
-                for (let j in data[i]) {
-                    try {
-                        let value = data[i][j];
-                        if (value == null) {
-                            value = "None"
-                        } else {
-                            value = value.toString();
-                        }
-                        item.setAttribute('data-' + i + '-' + j, value);
-                    }catch (e){
-                        console.error(grouping, i, j, e);
-                    }
-                }
-                continue;
-            }
-            item.setAttribute('data-' + i, data[i].toString());
-        }
+        update_item(item, data, grouping);
     } catch (e) {
         console.error(e, data);
         item.setAttribute('data-state', data.state);
