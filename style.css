@@ -142,6 +142,10 @@ div.group {
 .weather_symbol[data-state="6"]:after {
     content: "⛈️";
 }
+.weather_symbol[data-state="7"]:after{
+    content: "🌧️";
+}
+
 .weather_symbol[data-state="46"]:after{
     content: "🌧️";
 }
@@ -239,6 +243,12 @@ div.group {
         right: 40px;
     }
 
+    .solar_production.highpower:before {
+        font-size: 12pt;
+        content: "⚡ ";
+    }
+
+
     .solar_production:after {
         content: "Solar currently producing " attr(data-state) attr(data-attributes-unit_of_measurement);
         font-size: 18pt;
@@ -260,7 +270,7 @@ div.group {
     }
     body {
         display: grid;
-        grid-temlate-rows: [content] auto [config] auto [header] auto;
+        grid-template-rows: [content] auto [config] auto [header] auto;
     }
     #header {
         position: unset;

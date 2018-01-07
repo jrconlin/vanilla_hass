@@ -88,15 +88,7 @@ function make_group(data, grouping, parent){
 function make_sun(data, grouping, parent){
     // Since I can't do this with CSS alone,
     let sun = make_sensor(data, grouping, parent);
-    if (data.state === "above_horizon") {
-        if (data.attributes["azimuth"] <= 180) {
-            sun.innerText = "Good Morning";
-        } else {
-            sun.innerText = "Good Afternoon";
-        }
-    } else {
-        sun.innerText = "Good Evening";
-    }
+    update_sun(sun, data);
 }
 
 function make_camera(data, grouping, parent) {
@@ -116,29 +108,6 @@ function make_camera(data, grouping, parent) {
     }
     setInterval(update_img, 5000);
     parent.appendChild(item);
-}
-
-function update_item(item, data, grouping) {
-    for (let i in data) {
-        if (typeof(data[i]) === "object") {
-            for (let j in data[i]) {
-                try {
-                    let value = data[i][j];
-                    if (value == null) {
-                        value = "None"
-                    } else {
-                        value = value.toString();
-                    }
-                    item.setAttribute('data-' + i + '-' + j, value);
-                }catch (e){
-                    console.error(grouping, i, j, e);
-                }
-            }
-            continue;
-        }
-        item.setAttribute('data-' + i, data[i].toString());
-    }
-    return item;
 }
 
 function make_sensor(data, grouping, parent){
@@ -171,6 +140,71 @@ function make_sensor(data, grouping, parent){
     return item;
 }
 
+/* Updaters */
+
+function update_item(item, data, grouping) {
+    for (let i in data) {
+        if (typeof(data[i]) === "object") {
+            for (let j in data[i]) {
+                try {
+                    let value = data[i][j];
+                    if (value == null) {
+                        value = "None"
+                    } else {
+                        value = value.toString();
+                    }
+                    item.setAttribute('data-' + i + '-' + j, value);
+                }catch (e){
+                    console.error(grouping, i, j, e);
+                }
+                if ("checked" in item) {
+                    if (item.dataset.state === "on") {
+                        item.checked = true;
+                    } else {
+                        item.checked = false;
+                    }
+                }
+                try {
+                    window["update_"+grouping[0]](item, grouping);
+                } catch (e) {
+
+                }
+           }
+            continue;
+        }
+        item.setAttribute('data-' + i, data[i].toString());
+    }
+    return item;
+}
+
+/* Special Section handlers */
+
+function update_sun(item, grouping) {
+    let state = item.dataset["state"];
+    if (state === "above_horizon") {
+        if (data.attributes["azimuth"] <= 180) {
+            item.innerText = "Good Morning";
+        } else {
+            item.innerText = "Good Afternoon";
+        }
+    } else {
+        item.innerText = "Good Evening";
+    }
+}
+
+function update_sensor(item, grouping) {
+    switch(grouping[1]) {
+        case "solar_production":
+            if (item.dataset["state"] > 2) {
+                item.classlist.add("highpower");
+            } else {
+                item.classList.remove("highpower");
+            }
+            break;
+    }
+}
+
+
 function find_element(entity_id){
     let path = sensor_type(entity_id);
     try {
@@ -189,7 +223,7 @@ function handle_event(event) {
             let item = find_element(entity);
             if (item) {
                 // Update the current state.
-                item.dataset.state = event.data.new_state.state;
+                update_item(item, event.data.new_state, sensor_type(entity));
                 // Toggle the checkbox if need be.
                 if ("checked" in item) {
                     switch (item.dataset.state) {
