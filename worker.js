@@ -153,7 +153,7 @@ function update_item(item, data, grouping) {
                     } else {
                         value = value.toString();
                     }
-                    item.setAttribute('data-' + i + '-' + j, value);
+                    item.setAttribute('data-' + i + '_' + j, value);
                 }catch (e){
                     console.error(grouping, i, j, e);
                 }
@@ -164,15 +164,17 @@ function update_item(item, data, grouping) {
                         item.checked = false;
                     }
                 }
-                try {
-                    window["update_"+grouping[0]](item, grouping);
-                } catch (e) {
-
-                }
            }
             continue;
         }
         item.setAttribute('data-' + i, data[i].toString());
+    }
+    try {
+        window["update_"+grouping[0]](item, grouping);
+    } catch (e) {
+        if ((e instanceof TypeError) == false) {
+            console.error("Trapped exception:", e);
+        }
     }
     return item;
 }
@@ -180,9 +182,10 @@ function update_item(item, data, grouping) {
 /* Special Section handlers */
 
 function update_sun(item, grouping) {
-    let state = item.dataset["state"];
+    let data = item.dataset;
+    let state = data["state"];
     if (state === "above_horizon") {
-        if (data.attributes["azimuth"] <= 180) {
+        if (parseInt(data["attributes_azimuth"]) <= 180) {
             item.innerText = "Good Morning";
         } else {
             item.innerText = "Good Afternoon";
@@ -195,8 +198,8 @@ function update_sun(item, grouping) {
 function update_sensor(item, grouping) {
     switch(grouping[1]) {
         case "solar_production":
-            if (item.dataset["state"] > 2) {
-                item.classlist.add("highpower");
+            if (parseFloat(item.dataset["state"]) > 2.0) {
+                item.classList.add("highpower");
             } else {
                 item.classList.remove("highpower");
             }

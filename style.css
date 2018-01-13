@@ -76,7 +76,7 @@ div.group {
     padding: 0 0 0 .25em;
     font-size: 90%;
     text-align:right;
-    content: attr(data-state) attr(data-attributes-unit_of_measurement);
+    content: attr(data-state) attr(data-attributes_unit_of_measurement);
 }
 
 .automation, .script, .zone, .zwave {
@@ -121,7 +121,7 @@ div.group {
 .climate .thermostat:after {
     font-size: 12pt;
     white-space: pre;
-    content: attr(data-attributes-mode) " mode\A" attr(data-attributes-current_temperature) "°F, " attr(data-attributes-actual_humidity) "% humidity"
+    content: attr(data-attributes_mode) " mode\A" attr(data-attributes_current_temperature) "°F, " attr(data-attributes_actual_humidity) "% humidity"
 }
 
 .weather_symbol[data-state="1"]:after{
@@ -131,7 +131,7 @@ div.group {
     content: "🌤️";
 }
 .weather_symbol[data-state="3"]:after{
-    content: "️️🌥️";
+    content: "🌥️";
 }
 .weather_symbol[data-state="4"]:after{
     content: "☁️";
@@ -143,8 +143,33 @@ div.group {
     content: "⛈️";
 }
 .weather_symbol[data-state="7"]:after{
+    content: "❄️🌦️";
+}
+.weather_symbol[data-state="8"]:after{
+    content: "❄️🌥️";
+}
+.weather_symbol[data-state="9"]:after{
     content: "🌧️";
 }
+.weather_symbol[data-state="10"]:after{
+    content: "🌧️🌧️";
+}
+.weather_symbol[data-state="11"]:after{
+    content: "⛈️⛈️";
+}
+.weather_symbol[data-state="12"]:after{
+    content: "❄️🌨️";
+}
+.weather_symbol[data-state="13"]:after{
+    content: "❄️";
+}
+.weather_symbol[data-state="14"]:after{
+    content: "❄️🌨️";
+}
+.weather_symbol[data-state="15"]:after{
+    content: "🌁";
+}
+
 
 .weather_symbol[data-state="46"]:after{
     content: "🌧️";
@@ -198,7 +223,7 @@ div.group {
 
     .weather_temperature:after {
         font-size: 18pt;
-        content: "Outside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
+        content: "Outside Temp " attr(data-state) attr(data-attributes_unit_of_measurement);
     }
 
     .thermostat_humidity {
@@ -210,7 +235,7 @@ div.group {
 
     .thermostat_humidity:after {
         font-size: 18pt;
-        content: "Humidity " attr(data-state) attr(data-attributes-unit_of_measurement);
+        content: "Humidity " attr(data-state) attr(data-attributes_unit_of_measurement);
     }
 
     .thermostat_temperature {
@@ -222,7 +247,7 @@ div.group {
 
     .thermostat_temperature:after {
         font-size: 18pt;
-        content: "Inside Temp " attr(data-state) attr(data-attributes-unit_of_measurement);
+        content: "Inside Temp " attr(data-state) attr(data-attributes_unit_of_measurement);
     }
 
     .weather_wind_speed {
@@ -233,7 +258,7 @@ div.group {
     }
 
     .weather_wind_speed:after {
-        content: "Winds " attr(data-state) attr(data-attributes-unit_of_measurement);
+        content: "Winds " attr(data-state) attr(data-attribute_unit_of_measurement);
         font-size: 18pt;
     }
 
@@ -250,7 +275,7 @@ div.group {
 
 
     .solar_production:after {
-        content: "Solar currently producing " attr(data-state) attr(data-attributes-unit_of_measurement);
+        content: "Solar currently producing " attr(data-state) attr(data-attribute_unit_of_measurement);
         font-size: 18pt;
     }
 
@@ -348,4 +373,4 @@ input[type="checkbox"]:checked + label:before {
     display: none !important;
 }
 
-*[data-attributes-hidden="true"]{ display: none !important;}
+*[data-attribute_hidden="true"]{ display: none !important;}
